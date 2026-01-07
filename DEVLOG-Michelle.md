@@ -10,5 +10,5 @@ This document must be updated daily every time you finish a work session.
 - Setup .c and .h files - 2 minutes
 - Setup makefile - 9 minutes
 
-### 2024-01-03 - Brief description
+### 2025-01-07 - Setting up signal handler and sockets
 Expanded description including how much time was spent on task.
