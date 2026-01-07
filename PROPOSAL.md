@@ -20,6 +20,7 @@ and they are assigned 2 random card values. Everyone must choose hit or stand an
 # Technical Details:
 
 - Sockets will be used to allow players to connect to the server and it accoets multiple connections.
+- Using select to monitor multiple clients at a time
 - fork to handle each client separately
 - Signals will be use to end the game and clean up open sockets
 - Server handles deck creation and shuffling, player and dealer hands, simple Blackjack rules, and synchronization 
