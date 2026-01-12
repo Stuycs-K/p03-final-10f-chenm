@@ -5,7 +5,7 @@
 #define MAX_CLIENTS 10
 
 int server_setup(){
-  struct addrinfo * hints, * results;
+  struct addrinfo hints, * results;
   memset(&hints, 0, sizeof(hints));
 
   hints->ai_family = AF_INET;
