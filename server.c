@@ -7,10 +7,6 @@
 #include <unistd.h>
 
 int listen_socket;
-struct card deck[52];
-int top = 0;
-struct hand dealer;
-int round_started = 0;
 
 
 static void signal_Handler(int sig){
@@ -23,9 +19,9 @@ static void signal_Handler(int sig){
 }
 
 int main(){
-  
+
   signal(SIGINT, signal_Handler);
-  
+
   //server starts
   listen_socket = server_setup();
 
