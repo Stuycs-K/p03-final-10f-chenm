@@ -12,7 +12,7 @@ server: server.o networking.o blackjack.o
 server.o: server.c networking.h blackjack.h
 	@gcc -c -Wall server.c
 networking.o: networking.c networking.h blackjack.h
-	@gcc -Wall -c networking.clean
+	@gcc -Wall -c networking.c
 blackjack.o: blackjack.c blackjack.h
 	@gcc -Wall -c blackjack.c
 
