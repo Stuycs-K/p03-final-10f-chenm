@@ -42,9 +42,9 @@ void hand_to_string(struct hand *h, char *buffer){
     }
 }
 
-int hand_value(struct hand *h){
+/*int hand_value(struct hand *h){
   for(int i = 0; i < 3; i++){
-    
+
   }
 
-}
+}*/
