@@ -31,6 +31,8 @@ int server_setup(){
     exit(1);
   }
 
+  freeaddrinfo(results);
+
   listen(listen_socket, 10);
   printf("Server listening on port %s\n", PORT);
 
@@ -54,7 +56,11 @@ int server_setup(){
       }
     }
 
-    select(max_fd + 1, &read_fds, NULL, NULL, NULL);
+    int activity = select(max_fd + 1, &read_fds, NULL, NULL, NULL);
+    if(activity < 0){
+      perror("Select");
+      continue;
+    }
 
     if (FD_ISSET(listen_socket, &read_fds)){
 
@@ -64,7 +70,7 @@ int server_setup(){
       for (int i = 0; i < MAX_CLIENTS; i++){
         if(clients[i] == -1){
           clients[i] = client_socket;
-          write(client_socket, "Welcome to Blackjack\n", 23);
+          write(client_socket, "Welcome to Blackjack\n", 22);
           break;
         }
       }
