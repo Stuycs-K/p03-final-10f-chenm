@@ -6,7 +6,7 @@
 
 struct card{
     int value; // 1-11
-    char suit; //H: Heart, D: Diamond, C: Cloves, S: SPADE
+    char suit; //H: Heart, D: Diamond, C: Clubs, S: SPADE
 };
 
 struct hand {
