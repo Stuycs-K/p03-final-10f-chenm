@@ -1,7 +1,9 @@
 #include "blackjack.h"
 #include <stdlib.h>
-
 #include <time.h>
+#include <stdio.h>
+#include <string.h>
+
 
 struct card deck[MAX_DECK];
 int top = 0;
