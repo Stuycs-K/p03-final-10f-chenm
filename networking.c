@@ -8,10 +8,10 @@ int server_setup(){
   struct addrinfo hints, * results;
   memset(&hints, 0, sizeof(hints));
 
-  hints->ai_family = AF_INET;
-  hints->ai_socktype = SOCK_STREAM;
-  hints->ai_flags = AI_PASSIVE;
-  if (getaddrinfo(NULL, PORT, hints, &results) != 0){
+  hints.ai_family = AF_INET;
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_flags = AI_PASSIVE;
+  if (getaddrinfo(NULL, PORT, &hints, &results) != 0){
     perror("getaddrinfo");
     exit(1);
   }
