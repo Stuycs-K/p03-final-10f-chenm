@@ -1,10 +1,34 @@
 #include "networking.h"
+#include "blackjack.h"
+
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int listen_socket;
+struct card deck[52];
+int top = 0;
+struct hand dealer;
+int round_started = 0;
+
 
 static void signal_Handler(int sig){
+  if(sig == SIGINT){
+    printf("\nServer shutting down...\n");
+    if(listen_socket > 0) close(listen_socket);
+    exit(0);
+  }
 
 }
 
 int main(){
-  list[] = "1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10";
   
+  signal(SIGINT, signal_Handler);
+  
+  //server starts
+  listen_socket = server_setup();
+
+  return 0;
+
 }

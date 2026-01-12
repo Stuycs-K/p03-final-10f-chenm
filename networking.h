@@ -14,4 +14,5 @@
 #ifndef NETWORKING_H
 #define NETWORKING_H
 
+int server_select(void);
 #endif
