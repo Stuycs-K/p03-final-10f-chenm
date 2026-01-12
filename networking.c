@@ -35,7 +35,7 @@ int server_setup(){
   printf("Server listening on port %s\n", PORT);
 
   int clients[MAX_CLIENTS];
-  for(int i = 0; i < MAX_CLIENTS; i++) clients[i] == -1;
+  for(int i = 0; i < MAX_CLIENTS; i++) clients[i] = -1;
 
 
   fd_set read_fds;
@@ -95,7 +95,7 @@ int server_setup(){
 
       hand_to_string(&dealer, handbuf);
       sprintf(msg, "Dealer's hand: %s\n", handbuf);
-      write(client_socket, msg, sstrlen(msg));
+      write(client_socket, msg, strlen(msg));
     }
 
     for(int i = 0; i < MAX_CLIENTS; i++){
