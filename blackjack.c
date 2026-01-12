@@ -37,6 +37,14 @@ void hand_to_string(struct hand *h, char *buffer){
 
     for(int i = 0; i < h->count; i++){
         sprintf(temp, "[%d%c]", h->cards[i].value, h->cards[i].suit);
+
         strcat(buffer, temp);
     }
+}
+
+int hand_value(struct hand *h){
+  for(int i = 0; i < 3; i++){
+    
+  }
+
 }

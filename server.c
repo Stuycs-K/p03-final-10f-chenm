@@ -26,8 +26,8 @@ int main(){
 
   signal(SIGINT, signal_Handler);
 
-  
-  listen_socket = server_select();
+
+  listen_socket = server_setup();
 
   return 0;
 }

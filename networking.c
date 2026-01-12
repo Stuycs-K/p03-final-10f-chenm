@@ -80,7 +80,7 @@ int server_setup(){
         top = 0;
         dealer.count = 0;
         round_started = 1;
-      }
+      }//
 
       struct hand player;
       player.count = 0;
