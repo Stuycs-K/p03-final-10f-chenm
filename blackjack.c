@@ -32,7 +32,7 @@ void shuffle(struct card *deck){
 }
 
 void deal_card(struct card *deck, int *top, struct hand *h){
-    h->card[h->count++] = deck[(*top)++];
+    h->cards[h->count++] = deck[(*top)++];
 }
 
 void hand_to_string(struct hand *h, char *buffer){
