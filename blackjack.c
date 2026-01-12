@@ -1,6 +1,12 @@
 #include "blackjack.h"
 #include <stdlib.h>
+
 #include <time.h>
+
+struct card deck[MAX_DECK];
+int top = 0;
+struct hand dealer;
+int round_started = 0;
 
 void init_deck(struct card *deck){
     char suits[] = {'H', 'D', 'C', 'S'};
