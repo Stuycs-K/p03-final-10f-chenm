@@ -7,16 +7,19 @@
 #include <netdb.h>
 
 #define SERVER_PORT "9998"
-#define SERVER_HOST "localhost"
 
-int main() {
+int main(int argc, char *argv[]) {
+    char* IP = "127.0.0.1";
+    if(argc > 1){
+      IP=argv[1];
+    }
 
     struct addrinfo hints, *res;
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
 
-    if(getaddrinfo(SERVER_HOST, SERVER_PORT, &hints, &res) != 0){
+    if(getaddrinfo(IP, SERVER_PORT, &hints, &res) != 0){
         perror("getaddrinfo");
         exit(1);
     }
