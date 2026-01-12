@@ -105,7 +105,7 @@ int server_setup(){
         int bytes = read(sd, buff, sizeof(buff) - 1);
 
         if (bytes <= 0){
-          pritnf("Player disconnected.\n");
+          printf("Player disconnected.\n");
           close(sd);
           clients[i] = -1;
         } else {
