@@ -13,6 +13,7 @@
 
 #ifndef NETWORKING_H
 #define NETWORKING_H
+#define BUFFER_SIZE 1024;
 
 int server_select(void);
 #endif

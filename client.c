@@ -48,6 +48,25 @@ int main(int argc, char *argv[]) {
         printf("%s", buff);
     }
 
+    char buffer[BUFFER_SIZE];
+
+    while(1){
+      printf("Command: ");
+      fflush(stdout);
+
+      if(!fgets(buffer, BUFFER_SIZE, stdin)){
+        printf("Waiting for command: [hit] or [stand]\n");
+        break;
+      }
+
+      write(server_socket, buffer, strlen(buffer) + 1);
+
+      int bytes = read(sockfd, buffer, BUFFER_SIZE);
+      if(bytes <= 0) break;
+
+    }
+    printf("Client received: %s\n");
+
     printf("Server disconnected.\n");
     close(sockfd);
     return 0;
