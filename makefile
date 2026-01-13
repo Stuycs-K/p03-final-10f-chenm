@@ -2,8 +2,8 @@
 
 compile: client server
 	@echo "compile success"
-client: client.o networking.o
-	@gcc -o client client.o networking.o
+client: client.o
+	@gcc -o client client.o 
 
 client.o: client.c networking.h
 	@gcc -c -Wall client.c
