@@ -26,3 +26,8 @@ This document must be updated daily every time you finish a work session.
 - Added select() loop to let server monitor multiple connections at once and fixing it: 20 minutes
 - Reorganized networking code into networking.c / networking.h: 10 mins
 - Creating blackjack.c and blackjack.h files and began with game logic liek creating struct for deck and shuffling function and printing out shuffled decks for player: 45 minutes
+
+### 2025-01-12 - Fixing select server connecting
+- Fixing conenction by including IP address of computer labs
+
+### 2025-01-13 - 

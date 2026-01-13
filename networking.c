@@ -42,6 +42,8 @@ int server_setup(){
 
   fd_set read_fds;
 
+  char buff[1025]="";
+
   while(1){
 
     FD_ZERO(&read_fds);
@@ -102,6 +104,10 @@ int server_setup(){
       hand_to_string(&dealer, handbuf);
       sprintf(msg, "Dealer's hand: %s\n", handbuf);
       write(client_socket, msg, strlen(msg));
+
+      fgets(buff, sizeof(buff), stdin);
+      buff[strlen(buff)-1] = 0;
+      printf("Received from terminal: '%s'\n", buff);
     }
 
     for(int i = 0; i < MAX_CLIENTS; i++){

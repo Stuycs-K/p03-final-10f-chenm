@@ -59,13 +59,13 @@ int main(int argc, char *argv[]) {
         break;
       }
 
-      write(server_socket, buffer, strlen(buffer) + 1);
+      write(server_select, buffer, strlen(buffer) + 1);
 
       int bytes = read(sockfd, buffer, BUFFER_SIZE);
       if(bytes <= 0) break;
 
     }
-    printf("Client received: %s\n");
+    printf("Client received: %s\n", buffer);
 
     printf("Server disconnected.\n");
     close(sockfd);
