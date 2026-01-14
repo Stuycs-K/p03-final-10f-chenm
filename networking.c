@@ -150,12 +150,13 @@ int server_setup(){
 
             int p = hand_value(&player_hands[i]);
             int d = hand_value(&dealer);
+
+            if(d > 21 || p > d) write(sd, "You win!\n", 9);
+            else if(p < d) write(sd, "Dealer wins.\n", 14);
+            else write(sd, "Push (tie).\n", 12);
           } else{
             write(sd, "Invalid! Chose hit or stand...or just stop gambling.\n", 54);
           }
-
-          //Comparing values(Dealer or palyer go over 21, automatically bust)
-
         }
       }
     }
