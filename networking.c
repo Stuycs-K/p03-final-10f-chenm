@@ -103,7 +103,6 @@ int server_setup(){
       //dealer's hand
       sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
       write(client_socket, msg, strlen(msg));
-      write(client_socket,"Enter command: hit or stand\n", 29);
 
     }
 

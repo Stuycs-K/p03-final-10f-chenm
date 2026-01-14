@@ -28,6 +28,15 @@ This document must be updated daily every time you finish a work session.
 - Creating blackjack.c and blackjack.h files and began with game logic liek creating struct for deck and shuffling function and printing out shuffled decks for player: 45 minutes
 
 ### 2025-01-12 - Fixing select server connecting
-- Fixing conenction by including IP address of computer labs
+- Fixing conenction by including IP address of computer labs: 20 minutes
+- Debugging networking issues: 20 minutes
 
-### 2025-01-13 - 
+### 2025-01-13 - Finishing game logic and asking for input
+- Finish function hand_value which calculates value of deck: 15 minutes
+- Printing "Enter command" and taking in input from user: 30 minutes
+
+### 2025-01-14 -
+-
+-
+
+### 2025-01-15 - 

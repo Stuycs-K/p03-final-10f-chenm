@@ -11,6 +11,8 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+#define SERVER_PORT "9998"
+
 #ifndef NETWORKING_H
 #define NETWORKING_H
 #define BUFFER_SIZE 1024

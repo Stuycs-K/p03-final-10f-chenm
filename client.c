@@ -1,12 +1,4 @@
 #include "networking.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <netdb.h>
-
-#define SERVER_PORT "9998"
 
 int main(int argc, char *argv[]) {
     char* IP = "127.0.0.1";
@@ -48,7 +40,7 @@ int main(int argc, char *argv[]) {
         printf("%s", buff);
     }
 
-  
+
 
     while(1){
       printf("\nCommand [hit/stand]: ");

@@ -11,7 +11,7 @@ void init_deck(struct card *deck){
     for (int s = 0; s<4; s++){
         for (int v = 1; v <= 13; v++){
             deck[index].suit = suits[s];
-            deck[index].value = (v>10) ? 10 : v;
+            deck[index].value = (v>10) ? 10 : v; //Face cards are just 10
             index++;
         }
     }

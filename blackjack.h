@@ -14,13 +14,14 @@ struct hand {
     int count;
 };
 
-void init_deck(struct card *deck);
-void shuffle(struct card *deck);
-void deal_card(struct card *deck, int *top, struct hand *h);
-int hand_value(struct hand *h);
+void init_deck(struct card *deck); //Starting deck
+void shuffle(struct card *deck); //Randomize deck
+void deal_card(struct card *deck, int *top, struct hand *h); //Keeping track of which cards have been dealt with
+int hand_value(struct hand *h);//Calculating the value of each hand
 
-void hand_to_string(struct hand *h, char *buffer);
+void hand_to_string(struct hand *h, char *buffer); //Printing cards
 
+//Global values
 extern struct card deck[52];
 extern int top;
 extern struct hand dealer;
