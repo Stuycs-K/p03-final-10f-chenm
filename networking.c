@@ -75,35 +75,35 @@ int server_setup(){
           break;
         }
       }
+
+      //start round 
       if(!round_started){
         init_deck(deck);
         shuffle(deck);
         top = 0;
         dealer.count = 0;
         round_started = 1;
-      }//
 
-      struct hand player;
-      player.count = 0;
-
-      deal_card(deck, &top, &player);
-      deal_card(deck, &top, &player);
-
-      if(dealer.count < 2){
         deal_card(deck, &top, &dealer);
         deal_card(deck, &top, &dealer);
       }
-      char msg[1024];
-      char handbuf[256];
 
-      hand_to_string(&player_hands[player.count], handbuf);
-      sprintf(msg, "\nYour hand: %s\n", handbuf);
+      player_hands[i].count = 0;
+      deal_card(deck, &top, &player_hands[i]);
+      deal_card(deck, &top, &player_hands[i]);
+
+      char msg[1024];
+      char buf[256];
+
+      hand_to_string(&player_hands[player.count], buf);
+      sprintf(msg, "\nYour hand: %s\n", buf);
       write(client_socket, msg, strlen(msg));
 
       //dealer's hand
       sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
       write(client_socket, msg, strlen(msg));
-
+      write(client_socket, "Command: [hit/stand]:\n", 23);
+      break;
     }
 
     for(int i = 0; i < MAX_CLIENTS; i++){
@@ -122,17 +122,34 @@ int server_setup(){
 
           //Hit
           if (strncmp(buff, "hit", 3) == 0){
-            deal_card(deck, &top, *player_hands[i]);
+            deal_card(deck, &top, &player_hands[i]);
 
-            char msg[1024], handbuf[256];
-            hand_to_string(&player_hands[i], handbuf);
-            sprintf(msg, "Your hand: %s\n", handbuf);
+            char msg[1024], buf[256];
+            hand_to_string(&player_hands[i], buf);
+            sprintf(msg, "Your hand: %s\n", buf);
             write(sd, msg, strlen(msg));
+
+            if(hand_value(&player_hands[i]) > 21){
+              write(sd, "Bust! You lose.\n", 16);
+            }
           }
 
           //Stand
           else if (strncmp(buff, "stand", 5) == 0){
-            write(sd, "You chose to stand.\n", 21);
+            
+            //dealer stops at 17
+            while(hand_value(&dealer) < 17){
+              deal_card(deck, &top, &dealer);
+            }
+
+            char msg[1024], buf[256];
+            hand_to_string(&dealer, buf);
+            sprintf(msg, "\nDealer's full hand: %s\n", buf);
+
+            write(sd, msg, strlen(msg));
+
+            int p = hand_value(&player_hands[i]);
+            int d = hand_value(&dealer);
           } else{
             write(sd, "Invalid! Chose hit or stand...or just stop gambling.\n", 54);
           }
