@@ -42,9 +42,28 @@ void hand_to_string(struct hand *h, char *buffer){
     }
 }
 
-/*int hand_value(struct hand *h){
-  for(int i = 0; i < 3; i++){
+//Adds up all card values, all jack, queens, and kings are 10, and aces(1 or 11)
+int hand_value(struct hand *h){
+  int sum = 0;
+  int aces = 0;
 
+  for(int i = 0; i < h->count; i++){
+    int v = h->cards[i].value;
+
+    if(v == 1){
+        aces++;
+        sum += 11;
+    } else{
+        sum += v;
+    }
   }
 
-}*/
+  //Ace value(1 or 11)
+  while(sum > 21 && aces > 0){
+    sum -= 10;
+    aces--;
+  }
+
+  return sum;
+
+}
