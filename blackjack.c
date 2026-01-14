@@ -68,12 +68,4 @@ int hand_value(struct hand *h){
 
 }
 
-int compare_values(a, b){
-  if(hand_value(struct a) > hand_value(struct b)){
-    printf("Dealer Wins!")
-  } else if(hand_value(struct a) == hand_value(struct b)){
-    printf("Blackjack push(tie)!");
-  } else{
-    printf("Player Wins!");
-  }
-}
+

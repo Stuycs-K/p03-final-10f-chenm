@@ -25,7 +25,7 @@ static void signal_Handler(int sig){
 int main(){
 
   signal(SIGINT, signal_Handler);
-
+  signal(SIGTERM, signal_Handler);
 
   listen_socket = server_setup();
 
