@@ -3,6 +3,8 @@
 
 #define PORT "9998"
 #define MAX_CLIENTS 10
+int player_done[MAX_CLIENTS];//tracking player state
+player_done[i] = 0; //0 = still playing, 1 = busted or stood
 
 int server_setup(){
   struct addrinfo hints, * results;
@@ -122,6 +124,10 @@ int server_setup(){
 
           //Hit
           if (strncmp(buff, "hit", 3) == 0){
+            if(player_done[i]){
+              write(sd, "You are done this round.\n", 25);
+              continue;
+            }
             deal_card(deck, &top, &player_hands[i]);
 
             char msg[1024], buf[256];
@@ -136,7 +142,10 @@ int server_setup(){
 
           //Stand
           else if (strncmp(buff, "stand", 5) == 0){
-            
+            if(player_done[i]){
+              write(sd, "Already stood.\n", 16);
+              continue;
+            }
             //dealer stops at 17
             while(hand_value(&dealer) < 17){
               deal_card(deck, &top, &dealer);
