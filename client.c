@@ -38,34 +38,33 @@ int main(int argc, char *argv[]) {
     freeaddrinfo(res);
 
     printf("Connected to server!\n");
+    char buffer[BUFFER_SIZE];
 
-    char buff[1024];
-    int n;
 
     // Receive messages from server
+    int n;
     while((n = read(sockfd, buff, sizeof(buff)-1)) > 0){
-        buff[n] = 0;
+        buffer[n] = 0;
         printf("%s", buff);
     }
 
-    char buffer[BUFFER_SIZE];
+  
 
     while(1){
-      printf("Command: ");
+      printf("\nCommand [hit/stand]: ");
       fflush(stdout);
 
-      if(!fgets(buffer, BUFFER_SIZE, stdin)){
-        printf("Waiting for command: [hit] or [stand]\n");
-        break;
-      }
+      if(!fgets(buffer, sizeof(buffer), stdin)) break;
 
-      write(server_select, buffer, strlen(buffer) + 1);
+      write(sockfd, buffer, strlen(buffer));
 
-      int bytes = read(sockfd, buffer, BUFFER_SIZE);
+      int bytes = read(sockfd, buffer, sizeof(buffer)-1);
       if(bytes <= 0) break;
 
+      buffer[bytes] = 0;
+      printf("%s", buffer);
+
     }
-    printf("Client received: %s\n", buffer);
 
     printf("Server disconnected.\n");
     close(sockfd);

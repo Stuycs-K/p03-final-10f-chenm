@@ -42,7 +42,6 @@ int server_setup(){
 
   fd_set read_fds;
 
-  char buff[1025]="";
 
   while(1){
 
@@ -97,21 +96,20 @@ int server_setup(){
       char msg[1024];
       char handbuf[256];
 
-      hand_to_string(&player, handbuf);
-      sprintf(msg, "Your hand: %s\n", handbuf);
+      hand_to_string(&player_hands[player.count], handbuf);
+      sprintf(msg, "\nYour hand: %s\n", handbuf);
       write(client_socket, msg, strlen(msg));
 
-      hand_to_string(&dealer, handbuf);
-      sprintf(msg, "Dealer's hand: %s\n", handbuf);
+      //dealer's hand
+      sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
       write(client_socket, msg, strlen(msg));
+      write(client_socket,"Enter command: hit or stand\n", 29);
 
-      fgets(buff, sizeof(buff), stdin);
-      buff[strlen(buff)-1] = 0;
-      printf("Received from terminal: '%s'\n", buff);
     }
 
     for(int i = 0; i < MAX_CLIENTS; i++){
       int sd = clients[i];
+
       if (sd != -1 && FD_ISSET(sd, &read_fds)){
         char buff[1024];
         int bytes = read(sd, buff, sizeof(buff) - 1);
@@ -122,7 +120,23 @@ int server_setup(){
           clients[i] = -1;
         } else {
           buff[bytes] = 0;
-          printf("Player says: %s", buff);
+
+          //Hit
+          if (strncmp(buff, "hit", 3) == 0){
+            deal_card(deck, &top, *player_hands[i]);
+
+            char msg[1024], handbuf[256];
+            hand_to_string(&player_hands[i], handbuf);
+            sprintf(msg, "Your hand: %s\n", handbuf);
+            write(sd, msg, strlen(msg));
+          }
+
+          //Stand
+          else if (strncmp(buff, "stand", 5) == 0){
+            write(sd, "You chose to stand.\n", 21);
+          } else{
+            write(sd, "Invalid! Chose hit or stand...or just stop gambling.\n", 54);
+          }
         }
       }
     }
