@@ -136,6 +136,9 @@ int server_setup(){
           } else{
             write(sd, "Invalid! Chose hit or stand...or just stop gambling.\n", 54);
           }
+
+          //Comparing values(Dealer or palyer go over 21, automatically bust)
+
         }
       }
     }
