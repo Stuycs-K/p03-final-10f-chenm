@@ -93,17 +93,17 @@ int server_setup(){
           deal_card(deck, &top, &player_hands[i]);
           
           char msg[1024], buf[256];
+          
+          hand_to_string(&player_hands[i], buf);
+          sprintf(msg, "\nYour hand: %s\n", buf);
+          write(client_socket, msg, strlen(msg));
 
-        hand_to_string(&player_hands[i], buf);
-        sprintf(msg, "\nYour hand: %s\n", buf);
-        write(client_socket, msg, strlen(msg));
-
-        //dealer's hand
-        sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
-        write(client_socket, msg, strlen(msg));
-        write(client_socket, "Command: [hit/stand]:\n", 23);
+          //dealer's hand
+          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
+          write(client_socket, msg, strlen(msg));
+          write(client_socket, "Command: [hit/stand]:\n", 23);
         
-        break;
+          break;
         }
       }
     }
