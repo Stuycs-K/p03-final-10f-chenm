@@ -72,11 +72,11 @@ int server_setup(){
       for (int i = 0; i < MAX_CLIENTS; i++){
         if(clients[i] == -1){
           clients[i] = client_socket;
-          player_done[i] = 0; //Player state, 0 = still playing, 1 = busted 
+          player_done[i] = 0; //Player state, 0 = still playing, 1 = busted
 
           write(client_socket, "Welcome to Blackjack\n", 22);
-          
-          //start round 
+
+          //start round
         if(!round_started){
           init_deck(deck);
           shuffle(deck);
@@ -87,13 +87,13 @@ int server_setup(){
           deal_card(deck, &top, &dealer);
           deal_card(deck, &top, &dealer);
           }
-          
+
           player_hands[i].count = 0;
           deal_card(deck, &top, &player_hands[i]);
           deal_card(deck, &top, &player_hands[i]);
-          
+
           char msg[1024], buf[256];
-          
+
           hand_to_string(&player_hands[i], buf);
           sprintf(msg, "\nYour hand: %s\n", buf);
           write(client_socket, msg, strlen(msg));
@@ -101,10 +101,11 @@ int server_setup(){
           //dealer's hand
           sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
           write(client_socket, msg, strlen(msg));
-          write(client_socket, "Command: [hit/stand]:\n", 23);
-        
+          write(client_socket, "Command [hit/stand]:", 20);
+
           break;
         }
+
       }
     }
 
@@ -158,8 +159,7 @@ int server_setup(){
             char msg[1024], buf[256];
             hand_to_string(&dealer, buf);
             sprintf(msg, "\nDealer's full hand: %s\n", buf);
-
-            write(sd, msg, strlen(msg));
+            write(listen_socket, msg, strlen(msg));
 
             int p = hand_value(&player_hands[i]);
             int d = hand_value(&dealer);

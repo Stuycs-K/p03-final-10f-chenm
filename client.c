@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
 
     char buffer[BUFFER_SIZE];
     while(1){
-      printf("\nCommand [hit/stand]: ");
       fflush(stdout);
 
       if(!fgets(buffer, sizeof(buffer), stdin)) break;
