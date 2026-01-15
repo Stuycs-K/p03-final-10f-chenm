@@ -169,28 +169,37 @@ int server_setup(){
 
             player_done[i] = 1;
             write(sd, "You chose to stand.\n", 21);
-            //dealer stops at 17
-            while(hand_value(&dealer) < 17){
-              deal_card(deck, &top, &dealer);
+
+            if(all_players_done(clients, player_done)){
+              //dealer stops at 17
+              while(hand_value(&dealer) < 17){
+                deal_card(deck, &top, &dealer);
+              }
+
+              char msg[1024], buf[256];
+              hand_to_string(&dealer, buf);
+              sprintf(msg, "\n===Dealer's full hand: %s ===\n", buf);
+              broadcast(clients, msg);
+              
+              for(int j = 0; j<MAX_CLIENTS; j++){
+                if(clients[j] != -1){
+
+                  int p = hand_value(&player_hands[i]);
+                  int d = hand_value(&dealer);
+
+                  if(p > 21) write(clients[j], "You busted!\n", 12);
+                  else if(d > 21 || p > d) write(clients[j], "You win!\n", 9);
+                  else if(p < d) write(clients[j], "Dealer wins.\n", 14);
+                  else write(clients[j], "Push (tie).\n", 12);
+                }
+              }
             }
-
-            char msg[1024], buf[256];
-            hand_to_string(&dealer, buf);
-            sprintf(msg, "\nDealer's full hand: %s\n", buf);
-            write(listen_socket, msg, strlen(msg));
-
-            int p = hand_value(&player_hands[i]);
-            int d = hand_value(&dealer);
-
-            if(d > 21 || p > d) write(sd, "You win!\n", 9);
-            else if(p < d) write(sd, "Dealer wins.\n", 14);
-            else write(sd, "Push (tie).\n", 12);
           } else{
             write(sd, "Invalid! Chose hit or stand...or just stop gambling.\n", 54);
-          }
         }
       }
     }
+    round_started = 0;
   }
 
   return listen_socket;
