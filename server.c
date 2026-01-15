@@ -11,7 +11,7 @@ struct card deck[MAX_DECK];
 int top = 0;
 struct hand dealer;
 int round_started = 0;
-struct hand player_hands[MAX_CLIENTS];
+struct hand player_hands[10];
 
 int listen_socket;
 
