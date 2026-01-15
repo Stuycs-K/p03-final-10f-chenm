@@ -137,6 +137,7 @@ int server_setup(){
 
             if(hand_value(&player_hands[i]) > 21){
               write(sd, "Bust! You lose.\n", 16);
+              player_done[i] = 1;
             }
           }
 

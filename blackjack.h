@@ -26,5 +26,6 @@ extern struct card deck[52];
 extern int top;
 extern struct hand dealer;
 extern int round_started;
+extern struct hand player_hands[MAX_CLIENTS];
 
 #endif
