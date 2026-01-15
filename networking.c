@@ -5,6 +5,24 @@
 #define MAX_CLIENTS 10
 int player_done[MAX_CLIENTS];
 
+//HElper to check if all players are done
+int all_players_done(int clients[], int player_done[]){
+  for(int i = 0; i < MAX_CLIENTS; i++){
+    if(clients[i] != -1 && player_done[i] == 0){
+      return 0;
+    }
+  }
+  return 1;
+}
+
+void broadcast(int clients[], char *msg){
+  for(int i = 0; i < MAX_CLIENTS; i++){
+    if(clients[i] != -1){
+      write(clients[i], msg, strlen(msg));
+    }
+  }
+}
+
 int server_setup(){
   struct addrinfo hints, * results;
   memset(&hints, 0, sizeof(hints));
