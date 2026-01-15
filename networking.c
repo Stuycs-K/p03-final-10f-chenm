@@ -146,6 +146,9 @@ int server_setup(){
               write(sd, "Already stood.\n", 16);
               continue;
             }
+
+            player_done[i] = 1;
+            write(sd, "You chose to stand.\n", 21);
             //dealer stops at 17
             while(hand_value(&dealer) < 17){
               deal_card(deck, &top, &dealer);

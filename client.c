@@ -30,13 +30,13 @@ int main(int argc, char *argv[]) {
     freeaddrinfo(res);
 
     printf("Connected to server!\n");
-    char buf[BUFFER_SIZE]
+    char buf[BUFFER_SIZE];
 
     // Receive messages from server
     int n;
     while((n = read(sockfd, buf, sizeof(buf)-1)) > 0){
         buf[n] = 0;
-        printf("%s", buff);
+        printf("%s", buf);
     }
 
 
