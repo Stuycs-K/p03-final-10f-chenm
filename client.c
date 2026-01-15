@@ -32,12 +32,12 @@ int main(int argc, char *argv[]) {
     printf("Connected to server!\n");
     char buf[BUFFER_SIZE];
 
-    int bytes = read(sockfd, buffer, sizeof(buffer)-1);
+    int bytes = read(sockfd, buf, sizeof(buf)-1);
     if(bytes > 0){
-        buffer[bytes] = 0;
-        printf("%s", buffer);
+        buf[bytes] = 0;
+        printf("%s", buf);
     }
-    
+
     char buffer[BUFFER_SIZE];
     while(1){
       printf("\nCommand [hit/stand]: ");
