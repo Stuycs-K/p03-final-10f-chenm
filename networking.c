@@ -3,8 +3,7 @@
 
 #define PORT "9998"
 #define MAX_CLIENTS 10
-int player_done[MAX_CLIENTS];//tracking player state
-player_done[i] = 0; //0 = still playing, 1 = busted or stood
+int player_done[MAX_CLIENTS];
 
 int server_setup(){
   struct addrinfo hints, * results;
@@ -73,6 +72,8 @@ int server_setup(){
       for (int i = 0; i < MAX_CLIENTS; i++){
         if(clients[i] == -1){
           clients[i] = client_socket;
+          player_done[i] = 0; //Player state, 0 = still playing, 1 = busted 
+
           write(client_socket, "Welcome to Blackjack\n", 22);
           break;
         }
