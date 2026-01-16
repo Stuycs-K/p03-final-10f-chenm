@@ -216,7 +216,7 @@ int server_setup(){
                 else if(p < d) write(clients[j], "Dealer wins.\n", 14);
                 else write(clients[j], "Push (tie).\n", 12);
 
-                write(clients[j], "\nNew round! Command [hit/stand]: ", 36);
+                write(clients[j], "\nNew round! Command [hit/stand]: ", 34);
               }
             }
             //resets round
