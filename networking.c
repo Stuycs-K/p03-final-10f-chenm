@@ -173,15 +173,13 @@ int server_setup(){
           sprintf(msg, "Your hand: %s\n", buf);
           write(sd, msg, strlen(msg));
 
+          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
+          write(sd, msg,strlen(msg));
+
           if(hand_value(&player_hands[i]) > 21){
             write(sd, "Bust! You lose.\n", 16);
             player_done[i] = 1;
           }
-          
-          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
-          write(sd, msg,strlen(msg));
-
-          write(sd, "Command [hit/stand]: ", 22);
         }
 
         //stand
@@ -189,7 +187,6 @@ int server_setup(){
 
           if(player_done[i]){
             write(sd, "Already stood.\n", 16);
-            write(sd, "Command [hit/stand]: ", 22);
             continue;
           }
 
@@ -219,7 +216,7 @@ int server_setup(){
                 else if(p < d) write(clients[j], "Dealer wins.\n", 14);
                 else write(clients[j], "Push (tie).\n", 12);
 
-                write(clients[j], "Command [hit/stand]: ", 22);
+                write(clients[j], "\nNew round! Command [hit/stand]: ", 36);
               }
             }
             //resets round
@@ -236,7 +233,6 @@ int server_setup(){
 
         else{
           write(sd, "Invalid! Choose hit or stand...or quit\n", 40);
-          write(sd, "Command [hit/stand]: ", 22);
         }
       }
     }

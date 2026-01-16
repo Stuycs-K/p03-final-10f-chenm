@@ -24,6 +24,7 @@ void flush_serv_msg(int sockfd){
         } 
         buf[n] = 0;
         printf("%s", buf);
+        fflush(stdout);
     }
 
 }
@@ -75,7 +76,7 @@ int main(int argc, char *argv[]) {
 
     }
 
-    printf("Server disconnected.\n");
+
     close(sockfd);
     return 0;
 }
