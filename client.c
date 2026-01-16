@@ -11,6 +11,12 @@ void flush_serv_msg(int sockfd){
 
         if(n<sizeof(buf) - 1) break;
     }
+
+    if (n == 0){
+        printf("\nServer diconnected.\n");
+        close(sockfd);
+        exit(0);
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -43,10 +49,11 @@ int main(int argc, char *argv[]) {
     freeaddrinfo(res);
 
     printf("Connected to server!\n");
+    flush_serv_msg(sockfd);
 
     char buffer[BUFFER_SIZE];
     while(1){
-        flush_serv_msg(sockfd);
+
         
         printf("\nCommand [hit/stand]: ");
         fflush(stdout);
@@ -55,8 +62,6 @@ int main(int argc, char *argv[]) {
 
         buffer[strcspn(buffer, "\n")] = 0;
 
-        if(strlen(buffer) == 0) continue;
-        
         write(sockfd, buffer, strlen(buffer));
         flush_serv_msg(sockfd);
 
