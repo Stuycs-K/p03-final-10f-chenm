@@ -129,8 +129,7 @@ int server_setup(){
           sprintf(msg, "\nYour hand: %s\n", buf);
           write(client_socket, msg, strlen(msg));
 
-          sprintf(msg, "Dealer's hand: [%d%c] [??]\n",
-                  dealer.cards[0].value, dealer.cards[0].suit);
+          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
           write(client_socket, msg, strlen(msg));
           write(client_socket, "Command [hit/stand]: ", 22);
 
@@ -174,13 +173,15 @@ int server_setup(){
           sprintf(msg, "Your hand: %s\n", buf);
           write(sd, msg, strlen(msg));
 
-          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
-          write(sd, msg, strlen(msg));
-
           if(hand_value(&player_hands[i]) > 21){
             write(sd, "Bust! You lose.\n", 16);
             player_done[i] = 1;
           }
+          
+          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", deal_cards[0].value, dealer.cards[0].suit);
+          write(sd, msg,strlen(msg));
+
+          write(sd, "Command [hit/stand]: ", 22);
         }
 
         //stand
@@ -188,6 +189,7 @@ int server_setup(){
 
           if(player_done[i]){
             write(sd, "Already stood.\n", 16);
+            write(sd, "Command [hit/stand]: ", 22);
             continue;
           }
 
@@ -216,19 +218,28 @@ int server_setup(){
                 else if(d > 21 || p > d) write(clients[j], "You win!\n", 9);
                 else if(p < d) write(clients[j], "Dealer wins.\n", 14);
                 else write(clients[j], "Push (tie).\n", 12);
+
+                write(clients[j], "Command [hit/stand]: ", 22);
               }
             }
-
+            //resets round
             round_started = 0;
-            for(int j = 0; j < MAX_CLIENTS; j++) player_done[j] = 0;
+            dealer.count = 0;
+            top = 0;
+            for(int j = 0; j < MAX_CLIENTS; j++){
+              player_done[j] = 0;
+              player_hands[j].count = 0;
+            }
           }
         }
 
 
         else{
           write(sd, "Invalid! Choose hit or stand...or quit\n", 40);
+          write(sd, "Command [hit/stand]: ", 22);
         }
       }
     }
   }
+  return listen_socket;
 }
