@@ -16,6 +16,7 @@ extern void shutdown_server();
 
 int listen_socket;
 
+void shutdown_server(); 
 static void signal_Handler(int sig){
   if(sig == SIGINT || sig == SIGTERM){
     printf("\nServer shutting down...\n");

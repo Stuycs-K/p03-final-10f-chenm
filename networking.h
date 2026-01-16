@@ -1,3 +1,6 @@
+#ifndef NETWORKING_H
+#define NETWORKING_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -12,10 +15,11 @@
 #include <netdb.h>
 
 #define SERVER_PORT "9998"
-
-#ifndef NETWORKING_H
-#define NETWORKING_H
 #define BUFFER_SIZE 1024
 
-int server_select(void);
+int server_setup(void);
+void shutdown_server(void);
+void broadcast(int clients[], char *msg);
+int all_players_done(int clients[], int player_done[]);
+
 #endif
