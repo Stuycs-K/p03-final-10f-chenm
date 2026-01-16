@@ -153,92 +153,82 @@ int server_setup(){
 
         buff[bytes] = 0;
         if(buff[bytes-1] == '\n') buff[bytes-1] = 0;
+        char msg[2048], buf[256];
 
         //hit
         if(strncmp(buff, "hit", 3) == 0){
-          if(player_done[i]){
+          if (player_done[i]) {
             write(sd, "You are done this round.\nCommand [hit/stand]: ", 47);
             continue;
           }
-          
-          deal_card(deck, &top, &player_hands[i]);
 
-          char msg[1024], buf[256];
+          deal_card(deck, &top, &player_hands[i]);
           hand_to_string(&player_hands[i], buf);
           
-          if(hand_value(&player_hands[i]) > 21){
+          if (hand_value(&player_hands[i]) > 21) {
             player_done[i] = 1;
-            sprintf(msg,"Your hand: %s\nDealer's hand: [%d%c] [??]\nBust! You lose.\n", buf, dealer.cards[0].value, dealer.cards[0].suit);
-          } else{
+            sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nBust! You lose.\n", buf, dealer.cards[0].value, dealer.cards[0].suit);
+            write(sd, msg, strlen(msg));
+          } else {
             sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
+            write(sd, msg, strlen(msg));
           }
-          write(sd, msg, strlen(msg));
-        } else if(strncmp(buff, "stand", 5) == 0){
-
-          if(player_done[i]){
+        } else if (strncmp(buff, "stand", 5) == 0) {
+          if (player_done[i]) {
             write(sd, "Already stood.\nCommand [hit/stand]: ", 35);
             continue;
           }
-
           player_done[i] = 1;
-          write(sd, "You chose to stand.\n", 21);
-          
-          if(!all_players_done(clients, player_done)){
+           write(sd, "You chose to stand.\n", 21);
+           if (!all_players_done(clients, player_done)) {
             write(sd, "Waiting for other players...\n", 30);
             continue;
           }
-
-          while(hand_value(&dealer) < 17){
+          
+          while (hand_value(&dealer) < 17) {
             deal_card(deck, &top, &dealer);
           }
-
-          char dealer_buf[256], msg[2048];
+          
+          char dealer_buf[256];
           hand_to_string(&dealer, dealer_buf);
-
           sprintf(msg, "\n=== Dealer's full hand: %s ===\n", dealer_buf);
           broadcast(clients, msg);
-
+          
           int d = hand_value(&dealer);
           
-          for(int j = 0; j < MAX_CLIENTS; j++){
-            if(clients[j] != -1){
+          for (int j = 0; j < MAX_CLIENTS; j++) {
+            if (clients[j] != -1) {
               int p = hand_value(&player_hands[j]);
-
-              if(p > 21) write(clients[j], "You busted!\n", 12);
-              else if(d > 21 || p > d) write(clients[j], "You win!\n", 9);
-              else if(p < d) write(clients[j], "Dealer wins.\n", 14);
+              if (p > 21) write(clients[j], "You busted!\n", 12);
+              else if (d > 21 || p > d) write(clients[j], "You win!\n", 9);
+              else if (p < d) write(clients[j], "Dealer wins.\n", 14);
               else write(clients[j], "Push (tie).\n", 12);
             }
           }
-            //resets round
-            dealer.count = 0;
-            top = 0;
-            init_deck(deck);
-            shuffle(deck);
-
-            deal_card(deck, &top, &dealer);
-            deal_card(deck, &top, &dealer);
-
-            for(int j = 0; j < MAX_CLIENTS; j++){
-              if(clients[j] != -1){
-                player_done[j] = 0;
-                player_hands[j].count = 0;
-
-                deal_card(deck, &top, &player_hands[j]);
-                deal_card(deck, &top, &player_hands[j]);
-
-                char buf2[256], msg2[1024];
-                hand_to_string(&player_hands[j], buf2);
-
-                sprintf(msg2, "\n--- New Round ---\nYour hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ", buf2, dealer.cards[0].value, dealer.cards[0].suit);
-                write(clients[j], msg2, strlen(msg2));
-              }
+          
+          dealer.count = 0;
+          top = 0;
+          init_deck(deck);
+          shuffle(deck);
+          
+          deal_card(deck, &top, &dealer);
+          deal_card(deck, &top, &dealer);
+          
+          for (int j = 0; j < MAX_CLIENTS; j++) {
+            if (clients[j] != -1) {
+              player_done[j] = 0;
+              player_hands[j].count = 0;
+              deal_card(deck, &top, &player_hands[j]);
+              deal_card(deck, &top, &player_hands[j]);
+              hand_to_string(&player_hands[j], buf);
+              
+              sprintf(msg, "\n--- New Round ---\nYour hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
+              write(clients[j], msg, strlen(msg));
             }
           }
-
-
-        else{
-          write(sd, "Invalid! Choose hit or stand...or quit\n", 40);
+        }
+        else {
+          write(sd, "Invalid! Choose hit or stand...or quit!\n", 41);
         }
       }
     }
