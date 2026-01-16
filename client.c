@@ -1,5 +1,17 @@
 #include "networking.h"
 
+
+void flush_serv_msg(int sockfd){
+    char buf[BUFFER_SIZE];
+    int n;
+
+    while((n = read(sockfd, buf, sizeof(buf) - 1)) > 0)[
+        buf[n] = 0;
+        printf("%s", buf);
+
+        if(n<sizeof(buf) - 1) break;
+    ]
+}
 int main(int argc, char *argv[]) {
     char* IP = "127.0.0.1";
     if(argc > 1){
@@ -40,17 +52,16 @@ int main(int argc, char *argv[]) {
 
     char buffer[BUFFER_SIZE];
     while(1){
-      fflush(stdout);
+        flush_serv_msg(sockfd);
+        
+        printf("\nCommand [hit/stand]: ");
+        fflush(stdout);
+        
+        if(!fgets(buffer, sizeof(buffer), stdin)) break;
 
-      if(!fgets(buffer, sizeof(buffer), stdin)) break;
-
-      write(sockfd, buffer, strlen(buffer));
-
-      int bytes = read(sockfd, buffer, sizeof(buffer)-1);
-      if(bytes <= 0) break;
-
-      buffer[bytes] = 0;
-      printf("%s", buffer);
+        buffer[strcspn(buffer, "\n")] = 0;
+        write(sockfd, buffer, strlen(buffer));
+        flush_serv_msg(sockfd);
 
     }
 
