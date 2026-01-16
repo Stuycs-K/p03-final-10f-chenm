@@ -157,6 +157,7 @@ int server_setup(){
         }
 
         buff[bytes] = 0;
+        if(buff[bytes-1] == '\n') buff[bytes-1] = 0;
 
         //hit
         if(strncmp(buff, "hit", 3) == 0){
