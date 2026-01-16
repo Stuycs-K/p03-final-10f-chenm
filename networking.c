@@ -180,9 +180,7 @@ int server_setup(){
             write(sd, "You chose to stand.\n", 21);
           }
         }
-        else {
-          write(sd, "Invalid! Choose hit or stand...or quit!\n", 41);
-        }
+        
         if(all_players_done(clients, player_done)){
           round_done = 1;
         }
