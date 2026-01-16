@@ -233,7 +233,7 @@ int server_setup(){
             for(int j = 0; j < MAX_CLIENTS; j++){
               if(clients[j] != -1){
                 player_done[j] = 0;
-                player_hands[j].count = 0;s
+                player_hands[j].count = 0;
 
                 deal_card(deck, &top, &player_hands[j]);
                 deal_card(deck, &top, &player_hands[j]);
