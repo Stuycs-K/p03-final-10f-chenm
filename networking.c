@@ -158,7 +158,7 @@ int server_setup(){
         if(strncmp(buff, "hit", 3) == 0){
 
           if(player_done[i]){
-            write(sd, "You are done this round.\n", 25);
+            write(sd, "You are done this round.\nCommand [hit/stand]: ", 47);
             continue;
           }
 
@@ -166,13 +166,14 @@ int server_setup(){
 
           char msg[1024], buf[256];
           hand_to_string(&player_hands[i], buf);
-          sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ",buf, dealer.cards[0].value, dealer.cards[0].suit);
-          write(sd, msg, strlen(msg));
 
           if(hand_value(&player_hands[i]) > 21){
-            write(sd, "Bust! You lose.\n", 16);
             player_done[i] = 1;
+            sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nBust! You lose.\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
+          } else {
+            sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
           }
+          write(sd, msg, strlen(msg));
         }
 
         //stand
@@ -220,9 +221,6 @@ int server_setup(){
             shuffle(deck);
             round_started = 1;
 
-            deal_card(deck, &top, &dealer);
-            deal_card(deck, &top, &dealer);
-
             for(int j = 0; j < MAX_CLIENTS; j++){
               if(clients[j] != -1){
                 player_done[j] = 0;
@@ -232,13 +230,8 @@ int server_setup(){
                 deal_card(deck, &top, &player_hands[j]);
 
                 hand_to_string(&player_hands[j], buf);
-                sprintf(msg, "\nYour hand: %s\n", buf);
+                sprintf(msg, "\nYour hand: %s\nDealer's hand: [%d%c] [??]\nNew Round! Command [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
                 write(clients[j], msg, strlen(msg));
-
-                sprintf(msg, "Dealer's  hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
-                write(clients[j], msg, strlen(msg));
-
-                write(clients[j], "\nNew Round! Command [hit/stand]: ", 34);
               }
             }
           }

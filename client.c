@@ -59,12 +59,13 @@ int main(int argc, char *argv[]) {
     freeaddrinfo(res);
 
     printf("Connected to server!\n");
-    flush_serv_msg(sockfd);
 
     char buffer[BUFFER_SIZE];
     while(1){
         flush_serv_msg(sockfd);
-        
+        printf("\nCommand [hit/stand]: ");
+        fflush(stdout);
+
         if(!fgets(buffer, sizeof(buffer), stdin)) break;
 
         buffer[strcspn(buffer, "\n")] = 0;
@@ -72,7 +73,6 @@ int main(int argc, char *argv[]) {
         write(sockfd, buffer, strlen(buffer));
 
     }
-
 
     close(sockfd);
     return 0;
