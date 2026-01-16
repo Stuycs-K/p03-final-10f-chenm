@@ -126,12 +126,8 @@ int server_setup(){
 
           char msg[1024], buf[256];
           hand_to_string(&player_hands[i], buf);
-          sprintf(msg, "\nYour hand: %s\n", buf);
+          sprintf(msg, "\nYour hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);  
           write(client_socket, msg, strlen(msg));
-
-          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
-          write(client_socket, msg, strlen(msg));
-          write(client_socket, "Command [hit/stand]: ", 22);
 
           break;
         }
@@ -170,11 +166,8 @@ int server_setup(){
 
           char msg[1024], buf[256];
           hand_to_string(&player_hands[i], buf);
-          sprintf(msg, "Your hand: %s\n", buf);
+          sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ",buf, dealer.cards[0].value, dealer.cards[0].suit);
           write(sd, msg, strlen(msg));
-
-          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
-          write(sd, msg,strlen(msg));
 
           if(hand_value(&player_hands[i]) > 21){
             write(sd, "Bust! You lose.\n", 16);
