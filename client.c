@@ -9,7 +9,7 @@ void flush_serv_msg(int sockfd){
         fd_set fds;
         struct timeval tv;
         FD_ZERO(&fds);
-        FD_SET(sockfd);
+        FD_SET(sockfd, &fds);
         tv.tv_sec = 0;
         tv.tv_usec = 100000;
 
