@@ -174,6 +174,9 @@ int server_setup(){
           sprintf(msg, "Your hand: %s\n", buf);
           write(sd, msg, strlen(msg));
 
+          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
+          write(sd, msg, strlen(msg));
+
           if(hand_value(&player_hands[i]) > 21){
             write(sd, "Bust! You lose.\n", 16);
             player_done[i] = 1;
@@ -207,7 +210,7 @@ int server_setup(){
             for(int j = 0; j < MAX_CLIENTS; j++){
               if(clients[j] != -1){
 
-                int p = hand_value(&player_hands[j]);   // <-- FIXED
+                int p = hand_value(&player_hands[j]);
 
                 if(p > 21) write(clients[j], "You busted!\n", 12);
                 else if(d > 21 || p > d) write(clients[j], "You win!\n", 9);
@@ -217,10 +220,11 @@ int server_setup(){
             }
 
             round_started = 0;
+            for(int j = 0; j < MAX_CLIENTS; j++) player_done[j] = 0;
           }
         }
 
-        /* ---- INVALID ---- */
+
         else{
           write(sd, "Invalid! Choose hit or stand...or quit\n", 40);
         }

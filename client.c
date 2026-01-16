@@ -1,22 +1,31 @@
 #include "networking.h"
 
-
+//non blocking reads
 void flush_serv_msg(int sockfd){
     char buf[BUFFER_SIZE];
     int n;
 
-    while((n = read(sockfd, buf, sizeof(buf) - 1)) > 0){
+    while(1){
+        fd_set fds;
+        struct timeval tv;
+        FD_ZERO(&fds);
+        FD_SET(sockfd);
+        tv.tv_sec = 0;
+        tv.tv_usec = 100000;
+
+        int ret = select(sockfd + 1, &fds, NULL, NULL, &tv);
+        if(ret <= 0) break;
+
+        n = read(sockfd, buf, sizeof(buf)-1);
+        if(n<=0){
+            printf("\nServer diconnected.\n");
+            close(sockfd);
+            exit(0);
+        } 
         buf[n] = 0;
         printf("%s", buf);
-
-        if(n<sizeof(buf) - 1) break;
     }
 
-    if (n == 0){
-        printf("\nServer diconnected.\n");
-        close(sockfd);
-        exit(0);
-    }
 }
 
 int main(int argc, char *argv[]) {
@@ -53,7 +62,6 @@ int main(int argc, char *argv[]) {
 
     char buffer[BUFFER_SIZE];
     while(1){
-
         
         printf("\nCommand [hit/stand]: ");
         fflush(stdout);
