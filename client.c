@@ -5,13 +5,14 @@ void flush_serv_msg(int sockfd){
     char buf[BUFFER_SIZE];
     int n;
 
-    while((n = read(sockfd, buf, sizeof(buf) - 1)) > 0)[
+    while((n = read(sockfd, buf, sizeof(buf) - 1)) > 0){
         buf[n] = 0;
         printf("%s", buf);
 
         if(n<sizeof(buf) - 1) break;
-    ]
+    }
 }
+
 int main(int argc, char *argv[]) {
     char* IP = "127.0.0.1";
     if(argc > 1){
