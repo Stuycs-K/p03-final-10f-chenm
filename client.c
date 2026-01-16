@@ -63,16 +63,13 @@ int main(int argc, char *argv[]) {
 
     char buffer[BUFFER_SIZE];
     while(1){
-        
-        printf("\nCommand [hit/stand]: ");
-        fflush(stdout);
+        flush_serv_msg(sockfd);
         
         if(!fgets(buffer, sizeof(buffer), stdin)) break;
 
         buffer[strcspn(buffer, "\n")] = 0;
 
         write(sockfd, buffer, strlen(buffer));
-        flush_serv_msg(sockfd);
 
     }
 

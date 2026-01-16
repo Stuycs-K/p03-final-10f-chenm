@@ -216,16 +216,37 @@ int server_setup(){
                 else if(p < d) write(clients[j], "Dealer wins.\n", 14);
                 else write(clients[j], "Push (tie).\n", 12);
 
-                write(clients[j], "\nNew round! Command [hit/stand]: ", 34);
               }
             }
             //resets round
             round_started = 0;
             dealer.count = 0;
             top = 0;
+
+            init_deck(deck);
+            shuffle(deck);
+            round_started = 1;
+
+            deal_card(deck, &top, &dealer);
+            deal_card(deck, &top, &dealer);
+
             for(int j = 0; j < MAX_CLIENTS; j++){
-              player_done[j] = 0;
-              player_hands[j].count = 0;
+              if(clients[j] != -1){
+                player_done[j] = 0;
+                player_hands[j].count = 0;s
+
+                deal_card(deck, &top, &player_hands[j]);
+                deal_card(deck, &top, &player_hands[j]);
+
+                hand_to_string(&player_hands[j], buf);
+                sprintf(msg, "\nYour hand: %s\n", buf);
+                write(clients[j], msg, strlen(msg));
+
+                sprintf(msg, "Dealer's  hand: [%d%c] [??]\n", dealer.cards[0].value, dealer.cards[0].suit);
+                write(clients[j], msg, strlen(msg));
+
+                write(clients[j], "\nNew Round! Command [hit/stand]: ", 34);
+              }
             }
           }
         }
