@@ -74,6 +74,7 @@ int server_setup(){
   }
 
   fd_set read_fds;
+  int round_done = 0;
 
   while(1){
 
@@ -132,7 +133,6 @@ int server_setup(){
         }
       }
     }
-    int round_done = 0;
 
     for(int i = 0; i < MAX_CLIENTS; i++){
 
@@ -141,7 +141,7 @@ int server_setup(){
 
       if(FD_ISSET(sd, &read_fds)){
 
-        char buff[1024];
+        char buff[BUFFER_SIZE];
         int bytes = read(sd, buff, sizeof(buff)-1);
 
         if(bytes <= 0){
@@ -159,26 +159,31 @@ int server_setup(){
         if(strncmp(buff, "hit", 3) == 0){
           if (player_done[i]) {
             write(sd, "You are done this round.\nCommand [hit/stand]: ", 47);
-          } else {
-            deal_card(deck, &top, &player_hands[i]);
-            hand_to_string(&player_hands[i], buf);
-            
-            if (hand_value(&player_hands[i]) > 21) {
-              player_done[i] = 1;
-              sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nBust! You lose.\n", buf, dealer.cards[0].value, dealer.cards[0].suit);
-              write(sd, msg, strlen(msg));
-            } else {
-              sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
-              write(sd, msg, strlen(msg));
-            }
+            continue;
           }
-        } else if (strncmp(buff, "stand", 5) == 0) {
+          
+          deal_card(deck, &top, &player_hands[i]);
+          hand_to_string(&player_hands[i], buf);
+            
+          if (hand_value(&player_hands[i]) > 21) {
+            player_done[i] = 1;
+            sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nBust! You lose.\n", buf, dealer.cards[0].value, dealer.cards[0].suit);
+            write(sd, msg, strlen(msg));
+          } else {
+            sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
+            write(sd, msg, strlen(msg));
+          }
+        }
+        else if (strncmp(buff, "stand", 5) == 0) {
           if (player_done[i]) {
             write(sd, "Already stood.\nCommand [hit/stand]: ", 35);
-          } else {
-            player_done[i] = 1;
-            write(sd, "You chose to stand.\n", 21);
+            continue;
           }
+          player_done[i] = 1;
+          write(sd, "You chose to stand.\n", 21);
+        }
+        else{
+          write(sd, "Invald! Choose a command!\n", 27);
         }
         
         if(all_players_done(clients, player_done)){
@@ -226,9 +231,9 @@ int server_setup(){
             write(clients[j], msg, strlen(msg));
           }
           round_done = 0;
-        }
-      }
-    }
-  }
+        } // ends round_done
+      } // end FD_ISSET(sd)
+    } // end player loop
+  } //ends while loop
   return listen_socket;
 }
