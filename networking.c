@@ -146,7 +146,7 @@ int server_setup(){
       int sd = clients[i];
 
       if (sd == -1) continue;
-      if ( FD_ISSET(sdm &read_fds)){
+      if ( FD_ISSET(sd, &read_fds)){
         
         char buff[1024];
         int bytes = read(sd, buff, sizeof(buff) - 1);
