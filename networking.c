@@ -3,7 +3,9 @@
 
 #define PORT "9998"
 #define MAX_CLIENTS 10
+int clients[MAX_CLIENTS];
 int player_done[MAX_CLIENTS];
+
 
 //HElper to check if all players are done
 int all_players_done(int clients[], int player_done[]){
@@ -19,6 +21,18 @@ void broadcast(int clients[], char *msg){
   for(int i = 0; i < MAX_CLIENTS; i++){
     if(clients[i] != -1){
       write(clients[i], msg, strlen(msg));
+    }
+  }
+}
+
+void shutdown_server(){
+  char *msg = "\n Server is shutting down. Goodbye. \n";
+
+  for(int i = 0; i < MAX_CLIENTS; i++){
+    if(clients[i] != -1){
+      write(clients[i], msg,strlent(msg));
+      close(clients[i]);
+      clients[i] = -1;
     }
   }
 }
@@ -55,7 +69,7 @@ int server_setup(){
   listen(listen_socket, 10);
   printf("Server listening on port %s\n", PORT);
 
-  int clients[MAX_CLIENTS];
+
   for(int i = 0; i < MAX_CLIENTS; i++) clients[i] = -1;
 
 

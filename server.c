@@ -12,12 +12,14 @@ int top = 0;
 struct hand dealer;
 int round_started = 0;
 struct hand player_hands[10];
+extern void shutdown_server();
 
 int listen_socket;
 
 static void signal_Handler(int sig){
-  if(sig == SIGINT){
+  if(sig == SIGINT || sig == SIGTERM){
     printf("\nServer shutting down...\n");
+    shutdown_server();
     if(listen_socket > 0) close(listen_socket);
     exit(0);
   }
