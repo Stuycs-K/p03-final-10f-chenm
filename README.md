@@ -19,4 +19,4 @@ https://drive.google.com/file/d/1EMe6CIJ83RYrl4r5sOIxQoP30_HWK1KP/view?usp=shari
 
 ### Resources/ References:
 
-list here(CHANGE THIS!!!!!)
+- https://thelinuxcode.com/use-select-system-call-c/
