@@ -2,7 +2,7 @@
 #include "blackjack.h"
 
 #define PORT "9998"
-#define MAX_CLIENTS 10
+#define MAX_CLIENTS 4
 int clients[MAX_CLIENTS];
 int player_done[MAX_CLIENTS];
 
@@ -92,11 +92,10 @@ int server_setup(){
       perror("select");
       continue;
     }
-
-
-
+    
+    
     if(FD_ISSET(listen_socket, &read_fds)){
-
+      
       int client_socket = accept(listen_socket, NULL, NULL);
 
       printf("New player connected.\n");
@@ -160,47 +159,41 @@ int server_setup(){
         if(strncmp(buff, "hit", 3) == 0){
           if (player_done[i]) {
             write(sd, "You are done this round.\nCommand [hit/stand]: ", 47);
-            continue;
-          }
-
-          deal_card(deck, &top, &player_hands[i]);
-          hand_to_string(&player_hands[i], buf);
-          
-          if (hand_value(&player_hands[i]) > 21) {
-            player_done[i] = 1;
-            sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nBust! You lose.\n", buf, dealer.cards[0].value, dealer.cards[0].suit);
-            write(sd, msg, strlen(msg));
           } else {
-            sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
-            write(sd, msg, strlen(msg));
+            deal_card(deck, &top, &player_hands[i]);
+            hand_to_string(&player_hands[i], buf);
+            
+            if (hand_value(&player_hands[i]) > 21) {
+              player_done[i] = 1;
+              sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nBust! You lose.\n", buf, dealer.cards[0].value, dealer.cards[0].suit);
+              write(sd, msg, strlen(msg));
+            } else {
+              sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
+              write(sd, msg, strlen(msg));
+            }
           }
-          if(all_players_done(clients, player_done)) round_done = 1;
-        }
-        else if (strncmp(buff, "stand", 5) == 0) {
+        } else if (strncmp(buff, "stand", 5) == 0) {
           if (player_done[i]) {
             write(sd, "Already stood.\nCommand [hit/stand]: ", 35);
-            continue;
-          }
-          player_done[i] = 1;
-          write(sd, "You chose to stand.\n", 21);
-          if (all_players_done(clients, player_done)) {
-            round_done = 1;
-          } else{
-            write(sd, "Waiting for other players...\n", 30);
+          } else {
+            player_done[i] = 1;
+            write(sd, "You chose to stand.\n", 21);
           }
         }
         else {
-            write(sd, "Invalid! Choose hit or stand...or quit!\n", 41);
+          write(sd, "Invalid! Choose hit or stand...or quit!\n", 41);
         }
-        
+        if(all_players_done(clients, player_done)){
+          round_done = 1;
+        }
+
         if(round_done){
-          while(hand_value(&dealer) < 17)
+          while(hand_value(&dealer) < 17){
             deal_card(deck, &top, &dealer);
+          }
           
-          char dealer_buf[256], msg[2048];
-          
-          hand_to_string(&dealer, dealer_buf);
-          sprintf(msg, "\n=== Dealer's full hand: %s ===\n", dealer_buf);
+          hand_to_string(&dealer, buf);
+          sprintf(msg, "\n=== Dealer's full hand: %s ===\n", buf);
           broadcast(clients, msg);
           
           int d = hand_value(&dealer);
