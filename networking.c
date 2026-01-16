@@ -178,7 +178,7 @@ int server_setup(){
             player_done[i] = 1;
           }
           
-          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", deal_cards[0].value, dealer.cards[0].suit);
+          sprintf(msg, "Dealer's hand: [%d%c] [??]\n", dealer_cards[0].value, dealer.cards[0].suit);
           write(sd, msg,strlen(msg));
 
           write(sd, "Command [hit/stand]: ", 22);
