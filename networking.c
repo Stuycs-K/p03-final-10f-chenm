@@ -5,7 +5,6 @@
 #define MAX_CLIENTS 10
 int clients[MAX_CLIENTS];
 int player_done[MAX_CLIENTS];
-int listen_socket;
 
 //HElper to check if all players are done
 int all_players_done(int clients[], int player_done[]){

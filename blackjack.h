@@ -27,5 +27,6 @@ extern int top;
 extern struct hand dealer;
 extern int round_started;
 extern struct hand player_hands[10];
+extern int listen_socket;
 
 #endif
