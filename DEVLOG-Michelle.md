@@ -41,4 +41,7 @@ This document must be updated daily every time you finish a work session.
 - Compares values and prints who won/lose/tied: 20 minutes
 - Making a player state so you can't spam hit after you spammed: 20 minutes
 
-### 2025-01-15 -
+### 2025-01-15 - Finished most of game
+- Debuggin: 180 + minutes
+- Finishing flush and broadcasting functions: 40 minutes
+- Starting new round function: 40 minutes
