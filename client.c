@@ -43,13 +43,6 @@ int main(int argc, char *argv[]) {
     freeaddrinfo(res);
 
     printf("Connected to server!\n");
-    char buf[BUFFER_SIZE];
-
-    int bytes = read(sockfd, buf, sizeof(buf)-1);
-    if(bytes > 0){
-        buf[bytes] = 0;
-        printf("%s", buf);
-    }
 
     char buffer[BUFFER_SIZE];
     while(1){
@@ -61,6 +54,9 @@ int main(int argc, char *argv[]) {
         if(!fgets(buffer, sizeof(buffer), stdin)) break;
 
         buffer[strcspn(buffer, "\n")] = 0;
+
+        if(strlen(buffer) == 0) continue;
+        
         write(sockfd, buffer, strlen(buffer));
         flush_serv_msg(sockfd);
 
