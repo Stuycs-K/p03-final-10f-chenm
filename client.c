@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) {
         buffer[strcspn(buffer, "\n")] = 0;
 
         write(sockfd, buffer, strlen(buffer));
+        flush_serv_msg(sockfd);
 
     }
 

@@ -156,36 +156,36 @@ int server_setup(){
 
         //hit
         if(strncmp(buff, "hit", 3) == 0){
-
           if(player_done[i]){
-            write(sd, "You are done this round.\nCommand [hit/stand]: ", 47);
-            continue;
+            write(sd, "You are done this round.\n", 25);
+            return;
           }
-
+          
           deal_card(deck, &top, &player_hands[i]);
 
           char msg[1024], buf[256];
           hand_to_string(&player_hands[i], buf);
-
+          
           if(hand_value(&player_hands[i]) > 21){
             player_done[i] = 1;
-            sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nBust! You lose.\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
-          } else {
+            sprintf(msg,"Your hand: %s\nDealer's hand: [%d%c] [??]\nBust! You lose.\n", buf, dealer.cards[0].value, dealer.cards[0].suit);
+          }
+          
+          else{
             sprintf(msg, "Your hand: %s\nDealer's hand: [%d%c] [??]\nCommand [hit/stand]: ", buf, dealer.cards[0].value, dealer.cards[0].suit);
           }
           write(sd, msg, strlen(msg));
         }
-
+        
         //stand
         else if(strncmp(buff, "stand", 5) == 0){
 
           if(player_done[i]){
             write(sd, "Already stood.\n", 16);
-            continue;
+            return;
           }
 
           player_done[i] = 1;
-          write(sd, "You chose to stand.\n", 21);
 
           if(all_players_done(clients, player_done)){
 
@@ -193,9 +193,10 @@ int server_setup(){
               deal_card(deck, &top, &dealer);
             }
 
-            char msg[1024], buf[256];
-            hand_to_string(&dealer, buf);
-            sprintf(msg, "\n=== Dealer's full hand: %s ===\n", buf);
+            char dealer_buf[256], outcome_msg[128], msg[2048];
+            hand_to_string(&dealer, dealer_buf);
+
+            sprintf(msg, "\n=== Dealer's full hand: %s ===\n", dealer_buf);
             broadcast(clients, msg);
 
             int d = hand_value(&dealer);
@@ -213,13 +214,13 @@ int server_setup(){
               }
             }
             //resets round
-            round_started = 0;
             dealer.count = 0;
             top = 0;
-
             init_deck(deck);
             shuffle(deck);
-            round_started = 1;
+
+            deal_card(deck, &top, &dealer);
+            deal_card(deck, &top, &dealer);
 
             for(int j = 0; j < MAX_CLIENTS; j++){
               if(clients[j] != -1){
